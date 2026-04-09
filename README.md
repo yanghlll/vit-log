@@ -13,25 +13,40 @@ Training log comparison between **Quadtree** (multi-resolution patch) and **Base
 | Total Steps | 468,750 | 468,750 |
 | Batch Size | 32 | 32 |
 | LR / Optimizer | 0.001 / AdamW | 0.001 / AdamW |
+| Warmup Ratio | 0.1 | 0.1 |
 | Training Duration | ~93.6 hours | ~34.0 hours |
 | Throughput (total its/s) | ~240-260 | ~490-500 |
+| Restarts | 2 (step 330K, 338K) | 0 |
 | Initial Loss | 35.25 | 35.18 |
 | **Final Loss** | **19.18** | **17.86** |
-| Tokens/Batch | 62,720 (multi-res: 16/32/64px) | Fixed 196 patches |
+| Tokens/Batch | 62,720 (16/32/64px) | Fixed 196 patches |
 
 ## Visualizations
 
 ### 1. Loss Comparison
 ![Loss Comparison](figures/01_loss_comparison.png)
 
-### 2. Learning Rate & Throughput
-![LR and Throughput](figures/02_lr_throughput.png)
+### 2. Learning Rate Schedule
+Quadtree LR diverges after restart #2 (step 338K) due to scheduler re-initialization.
+![Learning Rate](figures/02_learning_rate.png)
 
-### 3. Quadtree-Specific Metrics
-![Quadtree Metrics](figures/03_quadtree_metrics.png)
+### 3. Quadtree: Embedding Norm
+![Embedding Norm](figures/03_embedding_norm.png)
 
-### 4. Summary Table
-![Summary](figures/04_summary_table.png)
+### 4. Quadtree: Gradient Norms
+![Gradient Norms](figures/04_gradient_norms.png)
+
+### 5. Quadtree: Token / Patch Distribution
+![Token Distribution](figures/05_token_distribution.png)
+
+### 6. Throughput Comparison
+![Throughput](figures/06_throughput.png)
+
+### 7. Quadtree: Loss / Grad Norm / Embed Norm Combined
+![Quadtree Combined](figures/07_quadtree_combined.png)
+
+### 8. Summary Table
+![Summary](figures/08_summary_table.png)
 
 ## How to Reproduce
 
@@ -52,9 +67,13 @@ python visualize.py
 │   └── baseline_loss.csv             # Extracted baseline loss
 ├── figures/
 │   ├── 01_loss_comparison.png
-│   ├── 02_lr_throughput.png
-│   ├── 03_quadtree_metrics.png
-│   └── 04_summary_table.png
+│   ├── 02_learning_rate.png
+│   ├── 03_embedding_norm.png
+│   ├── 04_gradient_norms.png
+│   ├── 05_token_distribution.png
+│   ├── 06_throughput.png
+│   ├── 07_quadtree_combined.png
+│   └── 08_summary_table.png
 ├── visualize.py
 └── README.md
 ```
